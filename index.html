@@ -55,6 +55,14 @@
       width: 150px;
       margin-bottom: 10px;
     }
+
+    #controls button {
+      width: 100%;
+      margin-top: 5px;
+      padding: 5px;
+      font-size: 14px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -67,12 +75,15 @@
 
     <label for="bgColorInput">Background Color</label>
     <input type="text" id="bgColorInput" value="#495117">
+
+    <button id="toggleMode">Mode: Remove Fog</button>
   </div>
 
   <script>
     const NUM_FOGS = 2000;
     let revealRadius = 70;
     const FOG_IMAGES = ['fog1.png', 'fog2.png', 'fog3.png'];
+    let addMode = false; // false = remove, true = add
 
     const container = document.getElementById('container');
     const fogs = [];
@@ -98,33 +109,38 @@
       fogs.push(fog);
     }
 
-    // Reveal on click
+    // Handle click to reveal or restore
     container.addEventListener('click', (e) => {
       const cx = e.clientX;
       const cy = e.clientY;
+
       fogs.forEach(fog => {
         const rect = fog.getBoundingClientRect();
         const fx = rect.left + rect.width / 2;
         const fy = rect.top + rect.height / 2;
         const dist = Math.sqrt((cx - fx) ** 2 + (cy - fy) ** 2);
         if (dist < revealRadius) {
-          fog.style.opacity = 0;
+          fog.style.opacity = addMode ? 1 : 0;
         }
       });
     });
 
-    // Slider to control reveal radius
-    const radiusSlider = document.getElementById('radiusSlider');
-    const radiusValue = document.getElementById('radiusValue');
-    radiusSlider.addEventListener('input', () => {
-      revealRadius = parseInt(radiusSlider.value);
-      radiusValue.textContent = revealRadius;
+    // Slider control
+    document.getElementById('radiusSlider').addEventListener('input', (e) => {
+      revealRadius = parseInt(e.target.value);
+      document.getElementById('radiusValue').textContent = revealRadius;
     });
 
-    // Input to change background color
-    const bgColorInput = document.getElementById('bgColorInput');
-    bgColorInput.addEventListener('change', () => {
-      document.body.style.backgroundColor = bgColorInput.value;
+    // Background color input
+    document.getElementById('bgColorInput').addEventListener('change', (e) => {
+      document.body.style.backgroundColor = e.target.value;
+    });
+
+    // Toggle mode button
+    const toggleBtn = document.getElementById('toggleMode');
+    toggleBtn.addEventListener('click', () => {
+      addMode = !addMode;
+      toggleBtn.textContent = addMode ? "Mode: Add Fog" : "Mode: Remove Fog";
     });
   </script>
 </body>
