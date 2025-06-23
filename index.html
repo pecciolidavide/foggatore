@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Fog Reveal</title>
   <style>
     html, body {
@@ -10,9 +10,10 @@
       padding: 0;
       height: 100%;
       overflow: hidden;
-      background: #495117 center center no-repeat; // #495117 è il colore di sfondo
+      background: #495117 center center no-repeat;
       background-size: contain;
     }
+
     #container {
       position: relative;
       width: 100%;
@@ -20,26 +21,59 @@
       background: url('https://github.com/pecciolidavide/backend_foggatore/blob/main/background.png?raw=true') center center no-repeat;
       background-size: contain;
     }
+
     .fog {
       position: absolute;
       pointer-events: none;
-      width: 75px; /* Adjustable size */
+      width: 75px;
       height: 75px;
-      // background-image: url('fog.png');
       background-size: cover;
       opacity: 1;
       transition: opacity 0.5s ease;
+    }
+
+    #controls {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      padding: 10px;
+      border-radius: 10px;
+      font-family: sans-serif;
+      z-index: 9999;
+    }
+
+    #controls label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+
+    #controls input[type="range"],
+    #controls input[type="text"] {
+      width: 150px;
+      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
   <div id="container"></div>
 
+  <div id="controls">
+    <label for="radiusSlider">Reveal Radius</label>
+    <input type="range" id="radiusSlider" min="10" max="200" value="70">
+    <span id="radiusValue">70</span>px
+
+    <label for="bgColorInput">Background Color</label>
+    <input type="text" id="bgColorInput" value="#495117">
+  </div>
+
   <script>
-    const NUM_FOGS = 2000; // Number of fog tiles
-    const REVEAL_RADIUS = 70; // Radius in pixels to clear on click
-    const FOG_IMAGES = ['fog1.png', 'fog2.png', 'fog3.png']; // fog tiles
-                               
+    const NUM_FOGS = 2000;
+    let revealRadius = 70;
+    const FOG_IMAGES = ['fog1.png', 'fog2.png', 'fog3.png'];
+
     const container = document.getElementById('container');
     const fogs = [];
 
@@ -64,21 +98,33 @@
       fogs.push(fog);
     }
 
-
-    // Handle click to reveal
+    // Reveal on click
     container.addEventListener('click', (e) => {
       const cx = e.clientX;
       const cy = e.clientY;
-
       fogs.forEach(fog => {
         const rect = fog.getBoundingClientRect();
         const fx = rect.left + rect.width / 2;
         const fy = rect.top + rect.height / 2;
         const dist = Math.sqrt((cx - fx) ** 2 + (cy - fy) ** 2);
-        if (dist < REVEAL_RADIUS) {
+        if (dist < revealRadius) {
           fog.style.opacity = 0;
         }
       });
+    });
+
+    // Slider to control reveal radius
+    const radiusSlider = document.getElementById('radiusSlider');
+    const radiusValue = document.getElementById('radiusValue');
+    radiusSlider.addEventListener('input', () => {
+      revealRadius = parseInt(radiusSlider.value);
+      radiusValue.textContent = revealRadius;
+    });
+
+    // Input to change background color
+    const bgColorInput = document.getElementById('bgColorInput');
+    bgColorInput.addEventListener('change', () => {
+      document.body.style.backgroundColor = bgColorInput.value;
     });
   </script>
 </body>
