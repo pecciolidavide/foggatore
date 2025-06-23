@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fog Reveal</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background: #495117 center center no-repeat; // #495117 è il colore di sfondo
+      background-size: contain;
+    }
+    #container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: url('background.png') center center no-repeat;
+      background-size: contain;
+    }
+    .fog {
+      position: absolute;
+      pointer-events: none;
+      width: 100px; /* Adjustable size */
+      height: 100px;
+      background-image: url('fog.png');
+      background-size: cover;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+    }
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+
+  <script>
+    const NUM_FOGS = 1500; // Number of fog tiles
+    const REVEAL_RADIUS = 100; // Radius in pixels to clear on click
+    const FOG_IMAGES = ['fog1.png', 'fog2.png', 'fog3.png']; // fog tiles
+                               
+    const container = document.getElementById('container');
+    const fogs = [];
+
+    // Generate fog tiles uniformly
+    const cols = Math.ceil(Math.sqrt(NUM_FOGS));
+    const rows = Math.ceil(NUM_FOGS / cols);
+    const spacingX = window.innerWidth / cols;
+    const spacingY = window.innerHeight / rows;
+
+    for (let i = 0; i < NUM_FOGS; i++) {
+      const fog = document.createElement('div');
+      fog.className = 'fog';
+      const col = i % cols;
+      const row = Math.floor(i / cols);
+      const jitterX = (Math.random() - 0.5) * spacingX * 0.5;
+      const jitterY = (Math.random() - 0.5) * spacingY * 0.5;
+      fog.style.left = `${col * spacingX + jitterX}px`;
+      fog.style.top = `${row * spacingY + jitterY}px`;
+      const randomImage = FOG_IMAGES[Math.floor(Math.random() * FOG_IMAGES.length)];
+      fog.style.backgroundImage = `url('${randomImage}')`;
+      container.appendChild(fog);
+      fogs.push(fog);
+    }
+
+
+    // Handle click to reveal
+    container.addEventListener('click', (e) => {
+      const cx = e.clientX;
+      const cy = e.clientY;
+
+      fogs.forEach(fog => {
+        const rect = fog.getBoundingClientRect();
+        const fx = rect.left + rect.width / 2;
+        const fy = rect.top + rect.height / 2;
+        const dist = Math.sqrt((cx - fx) ** 2 + (cy - fy) ** 2);
+        if (dist < REVEAL_RADIUS) {
+          fog.style.opacity = 0;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
