@@ -46,18 +46,18 @@
     // Generate fog tiles uniformly
     const cols = Math.ceil(Math.sqrt(NUM_FOGS));
     const rows = Math.ceil(NUM_FOGS / cols);
-    const spacingX = window.innerWidth / cols;
-    const spacingY = window.innerHeight / rows;
+    const spacingX = window.innerWidth / (cols - 2);
+    const spacingY = window.innerHeight / (rows - 2);
 
     for (let i = 0; i < NUM_FOGS; i++) {
       const fog = document.createElement('div');
       fog.className = 'fog';
       const col = i % cols;
       const row = Math.floor(i / cols);
-      const jitterX = (Math.random() - 0.5) * spacingX * 0.5;
-      const jitterY = (Math.random() - 0.5) * spacingY * 0.5;
-      fog.style.left = `${col * spacingX + jitterX}px`;
-      fog.style.top = `${row * spacingY + jitterY}px`;
+      const jitterX = (Math.random() - 0.5) * spacingX * 0.7;
+      const jitterY = (Math.random() - 0.5) * spacingY * 0.7;
+      fog.style.left = `${(col - 1) * spacingX + jitterX}px`;
+      fog.style.top = `${(row - 1) * spacingY + jitterY}px`;
       const randomImage = FOG_IMAGES[Math.floor(Math.random() * FOG_IMAGES.length)];
       fog.style.backgroundImage = `url('${randomImage}')`;
       container.appendChild(fog);
