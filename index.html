@@ -17,15 +17,15 @@
       position: relative;
       width: 100%;
       height: 100%;
-      background: url('background.png') center center no-repeat;
+      background: url('https://github.com/pecciolidavide/backend_foggatore/blob/main/background.png?raw=true') center center no-repeat;
       background-size: contain;
     }
     .fog {
       position: absolute;
       pointer-events: none;
-      width: 100px; /* Adjustable size */
-      height: 100px;
-      background-image: url('fog.png');
+      width: 75px; /* Adjustable size */
+      height: 75px;
+      // background-image: url('fog.png');
       background-size: cover;
       opacity: 1;
       transition: opacity 0.5s ease;
@@ -36,8 +36,8 @@
   <div id="container"></div>
 
   <script>
-    const NUM_FOGS = 1500; // Number of fog tiles
-    const REVEAL_RADIUS = 100; // Radius in pixels to clear on click
+    const NUM_FOGS = 2000; // Number of fog tiles
+    const REVEAL_RADIUS = 70; // Radius in pixels to clear on click
     const FOG_IMAGES = ['fog1.png', 'fog2.png', 'fog3.png']; // fog tiles
                                
     const container = document.getElementById('container');
